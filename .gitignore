@@ -1,0 +1,8 @@
+__pycache__/
+.venv/
+*.pyc
+*.log
+*.zip
+.DS_Store
+.env
+UsersASUSAppDataLocalnpm-cache/

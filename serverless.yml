@@ -1,0 +1,104 @@
+org: marcomadrid
+service: api-usuario-diagram
+
+provider:
+  name: aws
+  runtime: python3.9
+  memorySize: 1024
+  timeout: 30
+  iam:
+    role: arn:aws:iam::910414521227:role/LabRole
+  environment:
+    TABLE_NAME: ${sls:stage}-t_usuarios
+    TOKEN_TABLE_NAME: ${sls:stage}-t_tokens_acceso
+    S3_BUCKET: nombre-de-tu-bucket-s3
+
+functions:
+  CrearUsuario:
+    handler: api-usuario/CrearUsuario.lambda_handler
+    events:
+      - http:
+          path: /usuario/crear
+          method: post
+          cors: true
+
+  LoginUsuario:
+    handler: api-usuario/LoginUsuario.lambda_handler
+    events:
+      - http:
+          path: /usuario/login
+          method: post
+          cors: true
+
+  ValidarTokenAcceso:
+    handler: api-usuario/ValidarTokenAcceso.lambda_handler
+
+  DiagramsConverter:
+    handler: api-diagram/diagrams_converter.handler
+    layers:
+      - { Ref: DiagramsLayerLambdaLayer }
+    events:
+      - http:
+          path: /diagrama/diagrams
+          method: post
+          cors: true
+
+  EralchemyConverter:
+    handler: api-diagram/eralchemy_converter.handler
+    layers:
+      - { Ref: EralchemyLayerLambdaLayer }
+    events:
+      - http:
+          path: /diagrama/eralchemy
+          method: post
+          cors: true
+
+  MermaidParser:
+    handler: api-diagram/parser_mermaid_handler.handler
+    layers:
+      - { Ref: MermaidLayerLambdaLayer }
+    events:
+      - http:
+          path: /diagrama/mermaid
+          method: post
+          cors: true
+
+layers:
+  DiagramsLayer:
+    path: layer-diagram.zip
+
+  EralchemyLayer:
+    path: layer-eralchemy.zip
+
+  MermaidLayer:
+    path: mermaid_layer.zip
+
+resources:
+  Resources:
+    TablaUsuarios:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: tenant_id
+            AttributeType: S
+          - AttributeName: sort_key
+            AttributeType: S
+        KeySchema:
+          - AttributeName: tenant_id
+            KeyType: HASH
+          - AttributeName: sort_key
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    TablaTokensAcceso:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TOKEN_TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: token
+            AttributeType: S
+        KeySchema:
+          - AttributeName: token
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
