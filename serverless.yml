@@ -13,6 +13,14 @@ provider:
     TOKEN_TABLE_NAME: ${sls:stage}-t_tokens_acceso
     S3_BUCKET: nombre-de-tu-bucket-s3
 
+package:
+  exclude:
+    - node_modules/**
+    - venv/**
+    - .git/**
+    - __pycache__/**
+    - '*.zip'
+
 functions:
   CrearUsuario:
     handler: api-usuario/CrearUsuario.lambda_handler
@@ -54,7 +62,7 @@ functions:
           cors: true
 
   MermaidParser:
-    handler: api-diagram/parser_mermaid_handler.handler
+    handler: api-diagram/json2mermaid_converter.handler  # Asegúrate que el archivo correcto sea usado
     layers:
       - { Ref: MermaidLayerLambdaLayer }
     events:
