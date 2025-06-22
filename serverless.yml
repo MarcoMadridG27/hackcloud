@@ -21,6 +21,7 @@ package:
     - utils/**
     - requirements.txt
     - serverless.yml
+    - layers/**
   exclude:
     - .venv/**
     - node_modules/**
@@ -81,13 +82,13 @@ functions:
 
 layers:
   DiagramsLayer:
-    path: layer-diagram.zip
+    path: layers/layer-diagram.zip
 
   EralchemyLayer:
-    path: layer-eralchemy.zip
+    path: layers/layer-eralchemy.zip
 
   MermaidLayer:
-    path: mermaid_layer.zip
+    path: layers/mermaid_layer.zip
 
 resources:
   Resources:
