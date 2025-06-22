@@ -27,7 +27,6 @@ package:
     - node_modules/**
     - .git/**
     - __pycache__/**
-    - '*.zip'
 
 
 functions:
@@ -70,15 +69,6 @@ functions:
           method: post
           cors: true
 
-  MermaidParser:
-    handler: api-diagram/json2mermaid_converter.handler  # Asegúrate que el archivo correcto sea usado
-    layers:
-      - { Ref: MermaidLayerLambdaLayer }
-    events:
-      - http:
-          path: /diagrama/mermaid
-          method: post
-          cors: true
 
 layers:
   DiagramsLayer:
@@ -86,9 +76,6 @@ layers:
 
   EralchemyLayer:
     path: layers/layer-eralchemy.zip
-
-  MermaidLayer:
-    path: layers/mermaid_layer.zip
 
 resources:
   Resources:
