@@ -21,7 +21,9 @@ package:
     - utils/**
     - requirements.txt
     - serverless.yml
-    - layers/**
+    - layers/layer-diagram.zip
+    - layers/layer-eralchemy.zip
+
   exclude:
     - .venv/**
     - node_modules/**
