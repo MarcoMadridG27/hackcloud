@@ -14,12 +14,19 @@ provider:
     S3_BUCKET: nombre-de-tu-bucket-s3
 
 package:
+  include:
+    - api-diagram/**
+    - api-usuario/**
+    - utils/**
+    - requirements.txt
+    - serverless.yml
   exclude:
+    - .venv/**
     - node_modules/**
-    - venv/**
     - .git/**
     - __pycache__/**
     - '*.zip'
+
 
 functions:
   CrearUsuario:
